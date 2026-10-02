@@ -1,4 +1,4 @@
-import type { ConfidenceLevel, ConfidenceResult, IndicatorKey } from "@/types";
+import type { ConfidenceLevel, ConfidenceResult } from "@/types";
 
 export function calculateConfidence(input: {
   observationCount: number;

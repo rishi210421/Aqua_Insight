@@ -109,16 +109,6 @@ export default async function SitePage({
         {keys.map((key) => {
           const trend = trends[key];
           const value = components?.[key] ?? null;
-          const series = analytics.currentRows.map((r) => {
-            const c = {
-              waterQuality: r.waterQuality,
-              biodiversity: r.biodiversity,
-              habitat: r.habitat,
-              citizenSignal: null as number | null,
-              environmentalContext: null as number | null,
-            };
-            return { date: r.date, value: (key === "waterQuality" || key === "biodiversity" || key === "habitat") ? (r[key] ?? 0) : (value ?? 0) };
-          }).filter((p) => Number.isFinite(p.value));
           return (
             <Card key={key}>
               <CardTitle>{INDICATOR_LABELS[key]}</CardTitle>

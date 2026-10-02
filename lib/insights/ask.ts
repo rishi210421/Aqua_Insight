@@ -145,6 +145,6 @@ export function askAquaInsight(question: string, filters: AppFilters): AskResult
 }
 
 export function parseCompareIds(question: string) {
-  const mention = getSiteById;
-  return mention;
+  void question;
+  return getSiteById;
 }

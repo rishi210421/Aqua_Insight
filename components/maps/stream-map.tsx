@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import maplibregl, { type Map as MapLibreMap } from "maplibre-gl";
+import { LngLatBounds, Map, Marker, NavigationControl, setWorkerUrl, type Map as MapLibreMap } from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 import Link from "next/link";
 import { Input, Label, Select } from "@/components/ui/input";
@@ -52,6 +52,10 @@ export function StreamMap({ sites }: { sites: MapSitePoint[] }) {
   const ref = useRef<HTMLDivElement>(null);
   const mapRef = useRef<MapLibreMap | null>(null);
   const [selected, setSelected] = useState<MapSitePoint | null>(null);
+
+  useEffect(() => {
+    setWorkerUrl("/maplibre-gl-worker.mjs");
+  }, []);
   const [q, setQ] = useState("");
   const [layer, setLayer] = useState("sites");
   const [status, setStatus] = useState("");
@@ -67,13 +71,13 @@ export function StreamMap({ sites }: { sites: MapSitePoint[] }) {
 
   useEffect(() => {
     if (!ref.current || mapRef.current) return;
-    const map = new maplibregl.Map({
+    const map = new Map({
       container: ref.current,
       style: STYLE,
       center: [8, 43],
       zoom: 4,
     });
-    map.addControl(new maplibregl.NavigationControl(), "top-right");
+    map.addControl(new NavigationControl(), "top-right");
     mapRef.current = map;
     return () => {
       map.remove();
@@ -84,7 +88,7 @@ export function StreamMap({ sites }: { sites: MapSitePoint[] }) {
   useEffect(() => {
     const map = mapRef.current;
     if (!map) return;
-    const markers: maplibregl.Marker[] = [];
+    const markers: Marker[] = [];
     filtered.forEach((site) => {
       const el = document.createElement("button");
       el.type = "button";
@@ -104,7 +108,7 @@ export function StreamMap({ sites }: { sites: MapSitePoint[] }) {
               : COLORS[site.status];
       el.style.background = color;
       el.onclick = () => setSelected(site);
-      const marker = new maplibregl.Marker({ element: el }).setLngLat([site.longitude, site.latitude]).addTo(map);
+      const marker = new Marker({ element: el }).setLngLat([site.longitude, site.latitude]).addTo(map);
       markers.push(marker);
     });
     return () => {
@@ -115,7 +119,7 @@ export function StreamMap({ sites }: { sites: MapSitePoint[] }) {
   function fit() {
     const map = mapRef.current;
     if (!map || !filtered.length) return;
-    const b = new maplibregl.LngLatBounds();
+    const b = new LngLatBounds();
     filtered.forEach((s) => b.extend([s.longitude, s.latitude]));
     map.fitBounds(b, { padding: 48, maxZoom: 10 });
   }

@@ -14,16 +14,11 @@ import { inRange, resolveWindow } from "@/lib/filters";
 import { mean, round } from "@/lib/utils";
 import type {
   AppFilters,
-  CompletenessResult,
-  CompositeResult,
-  ConfidenceResult,
   IndicatorKey,
   IndicatorSnapshot,
   Site,
   SiteAnalyticsView,
   SpatialContext,
-  StructuredInsight,
-  TrendResult,
 } from "@/types";
 import { generateInsightCards, generateStructuredInsight } from "@/lib/insights/deterministic";
 
@@ -75,7 +70,6 @@ export function getObservations(filters: Partial<AppFilters> & { type?: string }
     if (filters.city && o.city !== filters.city) return false;
     if (filters.siteId && o.siteId !== filters.siteId) return false;
     if (filters.streamId) {
-      const site = getSiteById(filters.streamId) || getDataset().sites.find((s) => s.streamId === filters.streamId);
       if (filters.streamId && o.siteId) {
         const s = getSiteById(o.siteId);
         if (s && s.streamId !== filters.streamId) return false;
@@ -90,23 +84,6 @@ export function getObservations(filters: Partial<AppFilters> & { type?: string }
     }
     return true;
   });
-}
-
-export interface SiteAnalytics {
-  site: Site;
-  currentRows: IndicatorSnapshot[];
-  previousRows: IndicatorSnapshot[];
-  latest: IndicatorSnapshot | null;
-  components: ReturnType<typeof snapshotComponents> | null;
-  composite: CompositeResult;
-  confidence: ConfidenceResult;
-  completeness: CompletenessResult;
-  trends: Record<IndicatorKey | "composite" | "pollution", TrendResult>;
-  observationCount: number;
-  lastObservation: string | null;
-  spatial: SpatialContext;
-  hotspot: ReturnType<typeof detectHotspot>;
-  structured: StructuredInsight;
 }
 
 function rowsForSite(siteId: string, from: string, to: string) {

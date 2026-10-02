@@ -4,7 +4,7 @@ import { Menu, Moon, Search, Sun, Waves, X } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -28,8 +28,6 @@ export function AppHeader() {
   const [q, setQ] = useState("");
   const router = useRouter();
   const { theme, setTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => setMounted(true), []);
 
   return (
     <header className="sticky top-0 z-40 border-b border-border bg-background/90 backdrop-blur">
@@ -78,16 +76,14 @@ export function AppHeader() {
           </form>
           <Badge className="hidden sm:inline-flex border-watch/30 bg-watch/10 text-watch">Demo dataset</Badge>
           <span className="hidden text-xs text-muted-foreground sm:inline">Data status: demo</span>
-          {mounted && (
-            <Button
-              variant="ghost"
-              size="sm"
-              aria-label="Toggle theme"
-              onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-            >
-              {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-            </Button>
-          )}
+          <Button
+            variant="ghost"
+            size="sm"
+            aria-label="Toggle theme"
+            onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+          >
+            {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+          </Button>
           <Button variant="ghost" size="sm" className="lg:hidden" aria-label="Open menu" onClick={() => setOpen(true)}>
             <Menu className="h-5 w-5" />
           </Button>

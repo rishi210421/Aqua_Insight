@@ -156,14 +156,14 @@ export function generateDemoDataset(seed = DEMO_SEED, asOf = DEMO_AS_OF): DemoDa
       const seasonal = Math.sin((week / 52) * Math.PI * 2) * 6;
       const noise = () => (rand() - 0.5) * 8;
 
-      let wq = base.wq + seasonal + noise() + trendDelta(site.profile, "wq", progress);
-      let bio = base.bio + seasonal * 0.6 + noise() + trendDelta(site.profile, "bio", progress);
-      let hab = base.hab + seasonal * 0.4 + noise() + trendDelta(site.profile, "hab", progress);
-      let pol = base.pol - seasonal * 0.3 + noise() + trendDelta(site.profile, "pol", progress);
-      let veg = base.veg + seasonal * 0.5 + noise();
-      let flow = base.flow + seasonal * 0.2 + noise();
-      let rain = clamp(48 + seasonal * 1.2 + noise() * 1.4, 5, 95);
-      let temp = clamp(17 + seasonal * 0.35 + (rand() - 0.5) * 6, 2, 34);
+      const wq = base.wq + seasonal + noise() + trendDelta(site.profile, "wq", progress);
+      const bio = base.bio + seasonal * 0.6 + noise() + trendDelta(site.profile, "bio", progress);
+      const hab = base.hab + seasonal * 0.4 + noise() + trendDelta(site.profile, "hab", progress);
+      const pol = base.pol - seasonal * 0.3 + noise() + trendDelta(site.profile, "pol", progress);
+      const veg = base.veg + seasonal * 0.5 + noise();
+      const flow = base.flow + seasonal * 0.2 + noise();
+      const rain = clamp(48 + seasonal * 1.2 + noise() * 1.4, 5, 95);
+      const temp = clamp(17 + seasonal * 0.35 + (rand() - 0.5) * 6, 2, 34);
 
       const missingWq = site.profile === "gap" || (site.profile === "mixed" && week % 11 === 0);
       const missingBio = site.profile === "gap" && week % 5 === 0;

@@ -17,15 +17,18 @@ export default async function ComparePage({ searchParams }: PageProps<"/compare"
   const all = getSites();
   const selected = (ids.length ? ids : []).map((id) => getSiteAnalytics(id, filters)).filter(Boolean);
 
-  const chartData = selected.map((s) => ({
-    name: s!.site.code,
-    water: s!.components?.waterQuality,
-    biodiversity: s!.components?.biodiversity,
-    habitat: s!.components?.habitat,
-    citizen: s!.components?.citizenSignal,
-    environment: s!.components?.environmentalContext,
-    composite: s!.composite.score,
-  }));
+  const chartData = selected.map((s) => {
+    const components = s!.components;
+    return {
+      name: s!.site.code,
+      water: components?.waterQuality ?? null,
+      biodiversity: components?.biodiversity ?? null,
+      habitat: components?.habitat ?? null,
+      citizen: components?.citizenSignal ?? null,
+      environment: components?.environmentalContext ?? null,
+      composite: s!.composite.score ?? null,
+    };
+  });
 
   return (
     <div className="mx-auto max-w-7xl space-y-6 px-4 py-8">
